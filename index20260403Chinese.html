@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AAMB低骨密度风险计算器</title>
+
+    <style>
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Segoe UI", Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        h1 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 26px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin: 5px 0 0 0;
+        }
+
+        .desc-text {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 2px;
+            line-height: 1.5;
+        }
+
+        label {
+            font-weight: bold;
+            color: #34495e;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .helper-text {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .calc-btn {
+            background-color: #2c7be5;
+            color: white;
+        }
+
+        .calc-btn:hover {
+            background-color: #1a5fd0;
+        }
+
+        .reset-btn {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background-color: #7f8c8d;
+        }
+
+        #result {
+            padding: 18px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            min-height: 110px;
+            margin-top: 15px;
+            line-height: 1.7;
+            border-left: 6px solid #cfd8dc;
+        }
+
+        .result-card-low {
+            background: #f3faf5;
+            border-left-color: #27ae60;
+        }
+
+        .result-card-intermediate {
+            background: #fff8ef;
+            border-left-color: #f39c12;
+        }
+
+        .result-card-high {
+            background: #fdf2f2;
+            border-left-color: #c0392b;
+        }
+
+        .result-card-default {
+            background: #f8f9fa;
+            border-left-color: #cfd8dc;
+        }
+
+        .result-section-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+
+        .result-bmi {
+            font-size: 15px;
+            color: #2c3e50;
+            margin-bottom: 6px;
+        }
+
+        .result-prob {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2d3d;
+            margin-bottom: 10px;
+        }
+
+        .result-profile {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .profile-low { color: #1e8449; }
+        .profile-intermediate { color: #d68910; }
+        .profile-high { color: #b03a2e; }
+
+        .result-text {
+            font-size: 15px;
+            color: #2f3640;
+        }
+
+        .disclaimer {
+            color: #7f8c8d;
+            font-size: 12px;
+            margin-top: 20px;
+            font-style: italic;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="header-section">
+        <h1>AAMB低骨密度风险计算器</h1>
+        <p class="subtitle">（AAMB：年龄、初潮年龄、绝经年龄和BMI）</p>
+        <p class="desc-text">适用于绝经后亚裔女性，用于辅助判断是否需要进一步进行 DXA 骨密度检查</p>
+    </div>
+
+    <label>年龄（48–65岁）：</label>
+    <input type="number" id="age" placeholder="例如：52">
+
+    <label>初潮年龄（8–19岁）：</label>
+    <input type="number" id="menarche" placeholder="例如：13">
+
+    <label>绝经年龄（37–60岁）：</label>
+    <input type="number" id="menopause" placeholder="例如：50">
+
+    <label>体重（kg）：</label>
+    <input type="number" id="weight" step="0.1" placeholder="例如：60.0">
+
+    <label>身高（cm）：</label>
+    <input type="number" id="height" step="0.1" placeholder="例如：158.0">
+    <p class="helper-text">系统将根据身高和体重自动计算 BMI。</p>
+
+    <div class="btn-group">
+        <button class="calc-btn" onclick="calculateRisk()">开始评估</button>
+        <button class="reset-btn" onclick="resetForm()">重置</button>
+    </div>
+
+    <h3>评估结果：</h3>
+    <div id="result" class="result-card-default">
+        请输入相关信息后进行评估。
+    </div>
+
+    <p class="disclaimer">
+        *本工具仅用于筛查辅助，不能替代 DXA 检查或临床诊断。<br>
+         Author: Cheng-Wei Kang · Initial Release: 2024.04.02 · Ver: 1.1
+
+    </p>
+
+</div>
+
+<script>
+function calculateRisk() {
+
+    var age = parseFloat(document.getElementById("age").value);
+    var menarche = parseFloat(document.getElementById("menarche").value);
+    var menopause = parseFloat(document.getElementById("menopause").value);
+    var weight = parseFloat(document.getElementById("weight").value);
+    var height = parseFloat(document.getElementById("height").value);
+
+    var resultElement = document.getElementById("result");
+
+    if (isNaN(age) || isNaN(menarche) || isNaN(menopause) || isNaN(weight) || isNaN(height)) {
+        alert("请在所有输入框中填写有效数字。");
+        return;
+    }
+
+    if (age < 48 || age > 65 || menarche < 8 || menarche > 19 ||
+        menopause < 37 || menopause > 60 || weight <= 0 || height <= 0) {
+        alert("请输入合理范围内的数值。");
+        return;
+    }
+
+    var height_m = height / 100;
+    var bmi = weight / (height_m * height_m);
+
+    if (bmi < 15 || bmi > 40) {
+        alert("计算得到的 BMI 超出支持范围（15–40 kg/m²），请检查身高和体重输入是否正确。");
+        return;
+    }
+
+    var LP = 2.1186 + 0.1591 * age - 0.1602 * menopause + 0.1760 * menarche - 0.1646 * bmi;
+    var risk = 1 / (1 + Math.exp(-LP));
+
+    var riskPercent = (risk * 100).toFixed(1);
+    var bmiText = bmi.toFixed(1);
+
+    if (risk < 0.50) {
+        resultElement.className = "result-card-low";
+        resultElement.innerHTML =
+            "<div class='result-section-title'>临床解释</div>" +
+            "<div class='result-bmi'>BMI（自动计算）：<strong>" + bmiText + " kg/m²</strong></div>" +
+            "<div class='result-prob'>低骨密度预计概率： " + riskPercent + "%</div>" +
+            "<div class='result-profile profile-low'>提示为低风险倾向。</div>" +
+            "<div class='result-text'>是否进一步行 DXA 检查，建议结合临床综合评估。</div>";
+
+    } else if (risk < 0.75) {
+        resultElement.className = "result-card-intermediate";
+        resultElement.innerHTML =
+            "<div class='result-section-title'>临床解释</div>" +
+            "<div class='result-bmi'>BMI（自动计算）：<strong>" + bmiText + " kg/m²</strong></div>" +
+            "<div class='result-prob'>低骨密度预计概率： " + riskPercent + "%</div>" +
+            "<div class='result-profile profile-intermediate'>提示为中等风险倾向。</div>" +
+            "<div class='result-text'>如临床需要，可考虑进一步行 DXA 骨密度检查。</div>";
+
+    } else {
+        resultElement.className = "result-card-high";
+        resultElement.innerHTML =
+            "<div class='result-section-title'>临床解释</div>" +
+            "<div class='result-bmi'>BMI（自动计算）：<strong>" + bmiText + " kg/m²</strong></div>" +
+            "<div class='result-prob'>低骨密度预计概率： " + riskPercent + "%</div>" +
+            "<div class='result-profile profile-high'>提示为高风险倾向。</div>" +
+            "<div class='result-text'>可优先考虑进一步行 DXA 骨密度评估。</div>";
+    }
+}
+
+function resetForm() {
+    ["age", "menarche", "menopause", "weight", "height"].forEach(id => {
+        document.getElementById(id).value = "";
+    });
+
+    var resultElement = document.getElementById("result");
+    resultElement.className = "result-card-default";
+    resultElement.innerText = "请输入相关信息后进行评估。";
+}
+</script>
+
+</body>
+</html>
