@@ -27,7 +27,7 @@
 
 ## 🌐 在线计算器
 
-👉 https://kangarooqq.github.io/AAMB-score/
+👉 https://kangarooqq.github.io/AAMB-Risk-Calculator/
 
 ---
 
